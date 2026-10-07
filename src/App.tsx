@@ -41,7 +41,7 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <LazyMotion features={domAnimation} strict>
         <MotionConfig reducedMotion="user">
           <MainLayout>

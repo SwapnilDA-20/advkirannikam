@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
 import { OG_IMAGE, canonicalFor, metaFor, notFoundMeta, pages, structuredData, type PageMeta } from './src/data/seo.ts';
-import { heroImage } from './src/data/heroImage.ts';
+import { heroImageFor } from './src/data/heroImage.ts';
 import { SITE_URL, firm } from './src/data/site.ts';
 
 const START = '<!--seo:start-->';
@@ -11,7 +11,8 @@ const END = '<!--seo:end-->';
 const escapeAttr = (value: string) =>
   value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-function headTags(meta: PageMeta, { noindex = false } = {}): string {
+function headTags(meta: PageMeta, { noindex = false, base = '/' } = {}): string {
+  const heroImage = heroImageFor(base);
   const title = escapeAttr(meta.title);
   const description = escapeAttr(meta.description);
   const url = canonicalFor(meta.path);
@@ -43,7 +44,7 @@ function headTags(meta: PageMeta, { noindex = false } = {}): string {
   return `${START}\n    ${tags.join('\n    ')}\n    ${END}`;
 }
 
-function replaceHead(html: string, meta: PageMeta, options?: { noindex?: boolean }): string {
+function replaceHead(html: string, meta: PageMeta, options?: { noindex?: boolean; base?: string }): string {
   const start = html.indexOf(START);
   const end = html.indexOf(END);
   if (start === -1 || end === -1) throw new Error('SEO markers missing from index.html');
@@ -94,7 +95,7 @@ export function seo(): Plugin {
       }
     },
     transformIndexHtml(html) {
-      return html.replace('<!--seo-->', headTags(metaFor('/')));
+      return html.replace('<!--seo-->', headTags(metaFor('/'), { base: config.base }));
     },
     configureServer(server) {
       server.middlewares.use('/sitemap.xml', (_req, res) => {
@@ -115,7 +116,7 @@ export function seo(): Plugin {
         if (page.path === '/') continue;
         const dir = path.join(outDir, page.path);
         await mkdir(dir, { recursive: true });
-        let pageHtml = replaceHead(html, page);
+        let pageHtml = replaceHead(html, page, { base: config.base });
         const preloads = (routeChunks.get(page.path) ?? [])
           .filter((file) => !html.includes(`/${file}"`))
           .map((file) => `<link rel="modulepreload" crossorigin href="${config.base}${file}">`)
@@ -125,7 +126,7 @@ export function seo(): Plugin {
         await writeFile(path.join(dir, 'index.html'), pageHtml);
         await writeFile(`${dir}.html`, pageHtml);
       }
-      await writeFile(path.join(outDir, '404.html'), replaceHead(html, notFoundMeta, { noindex: true }));
+      await writeFile(path.join(outDir, '404.html'), replaceHead(html, notFoundMeta, { noindex: true, base: config.base }));
       await writeFile(path.join(outDir, 'sitemap.xml'), sitemap());
       await writeFile(path.join(outDir, 'robots.txt'), robots());
     },

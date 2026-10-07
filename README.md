@@ -26,6 +26,8 @@ npm run preview   # serve the production build
 
 `seo.plugin.ts` writes a static HTML entry for every route (`/about/index.html` and `/about.html`) with that page's title, description, canonical URL and Open Graph tags, plus `sitemap.xml`, `robots.txt` and a `noindex` `404.html`. Any static host works; no rewrite rules are required.
 
+To serve the site from a subfolder, set `BASE_PATH` at build time, for example `BASE_PATH=/advkirannikam/ npm run build`. `.github/workflows/deploy.yml` does this and publishes to GitHub Pages on every push to `main`.
+
 ## Images
 
 Source photographs are in `photos/pics/` and `scripts/source/`. To regenerate the optimised WebP files after changing a photograph:

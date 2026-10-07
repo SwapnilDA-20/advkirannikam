@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import { seo } from './seo.plugin.ts';
 
 export default defineConfig({
+  base: process.env.BASE_PATH ?? '/',
   plugins: [react(), tailwindcss(), seo()],
   server: {
     // Polling avoids exhausting the OS file-watch limit (EMFILE) on this machine.
