@@ -10,7 +10,7 @@ export const firm = {
   nameLine2: '& Associates',
   descriptor: 'Advocates & Legal Consultants',
   city: 'Mumbai, Maharashtra',
-  email: 'nikamassociates@gmail.com',
+  email: 'nikamassociates@advkirannikam.com',
   address: {
     lines: ['Shop No. 10, Dynesty Society,', 'Thakur Complex, 90 Feet Road,', 'Kandivali East,', 'Mumbai, Maharashtra'],
     street: 'Shop No. 10, Dynesty Society, Thakur Complex, 90 Feet Road',

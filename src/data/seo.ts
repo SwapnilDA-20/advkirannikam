@@ -48,7 +48,7 @@ export const pages: PageMeta[] = [
     path: '/contact',
     title: 'Contact the Office | Adv. Kiran Nikam & Associates',
     description:
-      'Contact Adv. Kiran Nikam & Associates at Shop No. 10, Dynesty Society, Thakur Complex, 90 Feet Road, Kandivali East, Mumbai, or by email at nikamassociates@gmail.com.',
+      'Contact Adv. Kiran Nikam & Associates at Shop No. 10, Dynesty Society, Thakur Complex, 90 Feet Road, Kandivali East, Mumbai, or by email at nikamassociates@advkirannikam.com.',
     priority: 0.8,
   },
   {
